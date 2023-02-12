@@ -1,0 +1,12 @@
+{
+  "tasks": {
+    "dev": "deno run --allow-env --allow-read --allow-write main.ts ",
+    "test": "deno test --parallel --allow-env --allow-read --allow-write"
+  },
+  "fmt": {
+    "options": {
+      "lineWidth": 100,
+      "singleQuote": true
+    }
+  }
+}
