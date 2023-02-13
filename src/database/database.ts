@@ -14,7 +14,7 @@ export const initDatabase = () => {
   db.execute(`
     CREATE TABLE IF NOT EXISTS ${TABLES.BLOCKCHAIN} (
       ${BLOCK_FIELDS.chainNumber} INTEGER PRIMARY KEY UNIQUE,
-      ${BLOCK_FIELDS.previousBlockHash } STRING,
+      ${BLOCK_FIELDS.previousBlockHash} STRING,
       ${BLOCK_FIELDS.data} STRING,
       ${BLOCK_FIELDS.publicKey} STRING,
       ${BLOCK_FIELDS.nonce} INTEGER,

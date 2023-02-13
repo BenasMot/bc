@@ -71,6 +71,6 @@ const startsWithZeros = (str: string, n: number) => {
   return str.slice(0, n).split('').every((s) => s === '0');
 };
 
-export const isEmptyChain = ():boolean => {
+export const isEmptyChain = (): boolean => {
   return db.getSavedChainLength() === 0;
 };
