@@ -1,11 +1,12 @@
 import { WebSocketServer } from 'https://deno.land/x/websocket@v0.1.4/mod.ts';
-import { createBlock } from '../blockchain/blocks.ts';
+import { createBlock, createGenesisBlock, isEmptyChain } from '../blockchain/blocks.ts';
 import { getMeasurements } from '../measurements/getMeasurements.ts';
 import { store } from '../store/store.ts';
 import { handleConnection } from './handlers/handleConnection.ts';
+import { addBlockToChain } from './utils/addBlockToChain.ts';
 import { announceBlock } from './utils/announceBlock.ts';
 import { connectToNode } from './utils/connectToNode.ts';
-import { updateChain } from "./utils/updateChain.ts";
+import { updateChain } from './utils/updateChain.ts';
 
 export const startClient = async (peers: string[]) => {
   const server = new WebSocketServer(store.getPort());
@@ -15,6 +16,9 @@ export const startClient = async (peers: string[]) => {
   peers.forEach(connectToNode);
 
   await updateChain();
+  if (isEmptyChain()) {
+    addBlockToChain(await createGenesisBlock({}));
+  }
 
   const intervalId = setInterval(loop, 10000);
   store.setAppLoopId(intervalId);

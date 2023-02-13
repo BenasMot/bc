@@ -1,3 +1,5 @@
+import { config } from "https://deno.land/x/dotenv@v3.2.0/mod.ts";
+
 type EnvKey =
   | 'PORT'
   | 'ADDRESS'
@@ -11,4 +13,4 @@ type Env = {
   [key in EnvKey]?: string;
 };
 
-export const env: Env = Deno.env.toObject();
+export const env: Env = config();

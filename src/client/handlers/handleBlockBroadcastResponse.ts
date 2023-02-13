@@ -16,7 +16,7 @@ export const handleBlockBroadcastResponse = async (message: BlockBroadcastRespon
   if (verifiedCount >= peerCount / 2) {
     const block = store.getPendingBlock()!;
     await shareBlock(block);
-    await addBlockToChain(block);
+    addBlockToChain(block);
   } else {
     await updateChain();
   }

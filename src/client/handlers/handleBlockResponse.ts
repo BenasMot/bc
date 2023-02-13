@@ -1,7 +1,7 @@
 import { BlockResponseMessage } from '../message.ts';
 import { addBlockToChain } from '../utils/addBlockToChain.ts';
 
-export const handleBlockResponse = async (message: BlockResponseMessage) => {
+export const handleBlockResponse = (message: BlockResponseMessage) => {
   const { block } = message;
-  await addBlockToChain(block);
+  addBlockToChain(block);
 };

@@ -1,14 +1,15 @@
+import { db } from '../database/actions.ts';
 import { Block } from '../database/types/Block.ts';
+import { store } from '../store/store.ts';
 import { createSignature } from '../utils/encryption/encryption.ts';
 import { hashData } from '../utils/hashing/hash.ts';
 
 export const createGenesisBlock = async (
-  publicKey: string,
   data: Record<string, unknown>,
 ): Promise<Block> => {
   const blockBase = {
     data: JSON.stringify(data),
-    publicKey,
+    publicKey: store.getPublicKeyString(),
     previousBlockHash: '',
     chainNumber: 0,
   };
@@ -68,4 +69,8 @@ const mineBlock = (
 
 const startsWithZeros = (str: string, n: number) => {
   return str.slice(0, n).split('').every((s) => s === '0');
+};
+
+export const isEmptyChain = ():boolean => {
+  return db.getSavedChainLength() === 0;
 };

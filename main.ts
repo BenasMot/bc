@@ -2,6 +2,9 @@ import { store } from './src/store/store.ts';
 import { env } from './env.ts';
 import { startClient } from './src/client/client.ts';
 import { getKeys } from './src/utils/keys/getKeys.ts';
+import { initDatabase } from './src/database/database.ts';
+import { importKeys } from './src/utils/encryption/encryption.ts';
+import { db } from './src/database/actions.ts';
 
 if (!env.PRIVATE_KEY || !env.PUBLIC_KEY) {
   throw Error('No keys provided');
@@ -23,6 +26,19 @@ store.setKeyStrings({
 });
 
 store.setKeys(await getKeys());
+importKeys(store.getKeys()!);
+
+initDatabase();
+
+const chainLength = db.getSavedChainLength();
+const latestBlock = db.getBlockFromChain(chainLength - 1);
+store.setBlockchain({
+  chainLength,
+  latestBlock,
+  checkedBlockHashMap: {},
+  verificationResponses: {},
+  pendingBlock: undefined,
+});
 
 const peers = env.PEERS?.split(',');
 await startClient(peers || []);

@@ -1,7 +1,8 @@
 {
   "tasks": {
+    "generateKeys": "deno run generateKeys.ts",
     "dev": "deno run --allow-env --allow-read --allow-write main.ts ",
-    "test": "deno test --parallel --allow-env --allow-read --allow-write"
+    "test": "deno test --parallel --allow-env --allow-read --allow-write",
   },
   "fmt": {
     "options": {

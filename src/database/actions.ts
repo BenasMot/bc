@@ -8,7 +8,7 @@ const addBlockToChain = (block: Block) => {
   getDatabase().execute(createInsertStatement(block, TABLES.BLOCKCHAIN));
 };
 
-const getBlockFromChain = (blockNumber: number): Block => {
+const getBlockFromChain = (blockNumber: number): Block | undefined => {
   const block: Block = {
     chainNumber: 0,
     previousBlockHash: '',
@@ -26,6 +26,10 @@ const getBlockFromChain = (blockNumber: number): Block => {
     `SELECT ${dbKeys.join(', ')} FROM ${TABLES.BLOCKCHAIN} WHERE chain_number = ?;`,
     [blockNumber],
   )[0];
+
+  if (values?.length !== keys.length) {
+    return undefined;
+  }
 
   const entries = keys.map((key, index) => [key, values[index]]);
 

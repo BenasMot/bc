@@ -6,11 +6,11 @@ import { sendChainRequest } from '../senders/sendChainRequest.ts';
 import { requestBlock } from './requestBlock.ts';
 
 export const updateChain = async () => {
-  const savedChainLength = await db.getSavedChainLength();
+  const savedChainLength = db.getSavedChainLength();
   const peerChainLengths = await gatherChainLengths();
   const dominantResponse = getDominantResponse(peerChainLengths);
 
-  const foundLongerChain = savedChainLength < dominantResponse.chainLength;
+  const foundLongerChain = dominantResponse && savedChainLength < dominantResponse.chainLength;
 
   if (foundLongerChain) {
     const socket = dominantResponse.socket;
@@ -39,7 +39,12 @@ const gatherChainLengths = async () => {
   return responses;
 };
 
-const getDominantResponse = (responses: ChainLengthResponse[]): ChainLengthResponse => {
+const getDominantResponse = (responses: ChainLengthResponse[]): ChainLengthResponse | undefined => {
+  if (!responses || responses.length < 1) {
+    console.error('No chain length responses received');
+    return;
+  }
+
   const map = new Map<string, number>();
   responses.forEach((response) => {
     const key = `${response.lastBlockHash}_${response.chainLength}`;

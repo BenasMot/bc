@@ -58,6 +58,7 @@ const _store: Store = {
 };
 
 const getters = {
+  getKeys: () => _store.keys,
   getIdentity: () => _store.identity,
   getAddress: () => _store.identity?.address,
   getPort: () => _store.identity?.port,
