@@ -2,6 +2,7 @@ import { store } from '../../store/store.ts';
 import { BlockBroadcastResponseMessage } from '../message.ts';
 import { addBlockToChain } from '../utils/addBlockToChain.ts';
 import { shareBlock } from '../utils/shareBlock.ts';
+import { updateChain } from '../utils/updateChain.ts';
 
 export const handleBlockBroadcastResponse = async (message: BlockBroadcastResponseMessage) => {
   const { checkedBlockHash, verified } = message;
@@ -16,7 +17,9 @@ export const handleBlockBroadcastResponse = async (message: BlockBroadcastRespon
     const block = store.getPendingBlock()!;
     await shareBlock(block);
     await addBlockToChain(block);
-  } // TODO handle case if block was declined
+  } else {
+    await updateChain();
+  }
 };
 
 const assertIsPendingBlock = (hash: string) => {

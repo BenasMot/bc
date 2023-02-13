@@ -1,6 +1,6 @@
 import { StandardWebSocketClient } from 'https://deno.land/x/websocket@v0.1.4/mod.ts';
 import { store } from '../../store/store.ts';
-import { sleep } from '../../utils/process/sleep.ts';
+import { sleep } from '../../utils/other/sleep.ts';
 import { sendBlockRequest } from '../senders/sendBlockRequest.ts';
 
 export const requestBlock = async (socket: StandardWebSocketClient, blockNumber: number) => {

@@ -1,7 +1,7 @@
 import { db } from '../../database/actions.ts';
 import { ChainLengthResponse, store } from '../../store/store.ts';
-import { range } from '../../utils/process/range.ts';
-import { sleep } from '../../utils/process/sleep.ts';
+import { range } from '../../utils/other/range.ts';
+import { sleep } from '../../utils/other/sleep.ts';
 import { sendChainRequest } from '../senders/sendChainRequest.ts';
 import { requestBlock } from './requestBlock.ts';
 

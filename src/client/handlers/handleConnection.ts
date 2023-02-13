@@ -6,7 +6,8 @@ import { handleBlockBroadcastResponse } from './handleBlockBroadcastResponse.ts'
 import { handleBlockShare } from './handleBlockShare.ts';
 import { handleChainRequest } from './handleChainRequest.ts';
 import { handleChainResponse } from './handleChainResponse.ts';
-import { handleBlockRequest } from "./handleBlockRequest.ts";
+import { handleBlockRequest } from './handleBlockRequest.ts';
+import { handleBlockResponse } from './handleBlockResponse.ts';
 
 export const handleConnection = (socket: StandardWebSocketClient) => {
   socket.on('message', (messageStr: string) => {
@@ -38,7 +39,8 @@ export const handleConnection = (socket: StandardWebSocketClient) => {
       }
 
       case 'BLOCK_RESPONSE': {
-        // TODO set block
+        // put block in local chain
+        handleBlockResponse(message);
         break;
       }
 
