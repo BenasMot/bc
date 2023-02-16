@@ -20,7 +20,7 @@ export const startClient = async (peers: string[]) => {
     addBlockToChain(await createGenesisBlock({}));
   }
 
-  const intervalId = setInterval(loop, 10000);
+  const intervalId = setInterval(loop, 15000);
   store.setAppLoopId(intervalId);
 };
 
