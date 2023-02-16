@@ -8,10 +8,14 @@ import { handleChainRequest } from './handleChainRequest.ts';
 import { handleChainResponse } from './handleChainResponse.ts';
 import { handleBlockRequest } from './handleBlockRequest.ts';
 import { handleBlockResponse } from './handleBlockResponse.ts';
+import { logMessage } from '../../utils/log/logMessage.ts';
 
 export const handleConnection = (socket: StandardWebSocketClient) => {
-  socket.on('message', (messageStr: string) => {
-    const message: Message = JSON.parse(messageStr);
+  socket.on('message', (messageObj: string | MessageEvent<Message>) => {
+    const message: Message = typeof messageObj === 'string'
+      ? JSON.parse(messageObj)
+      : messageObj.data;
+    logMessage(message, 'RECEIVED');
 
     switch (message.type) {
       case 'HANDSHAKE': {

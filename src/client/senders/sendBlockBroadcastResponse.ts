@@ -6,6 +6,7 @@ export const sendBlockBroadcastResponse = async (
   verified: boolean,
   checkedBlockHash: string,
 ) => {
+  console.log('### Sending Block Broadcast Response', { verified });
   const message: BlockBroadcastResponseMessage = {
     type: 'BLOCK_BROADCAST_RESPONSE',
     verified,

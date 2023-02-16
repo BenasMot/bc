@@ -7,5 +7,5 @@ export const handleChainResponse = (
   socket: StandardWebSocketClient,
 ) => {
   const { lastBlockHash, chainLength } = message;
-  store.addChainLengthResponse({ lastBlockHash, chainLength, socket });
+  store.addChainLengthResponse({ lastBlockHash, chainLength}, socket);
 };

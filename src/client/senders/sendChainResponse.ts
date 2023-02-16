@@ -1,5 +1,6 @@
 import { StandardWebSocketClient } from 'https://deno.land/x/websocket@v0.1.4/mod.ts';
 import { ChainResponseMessage } from '../message.ts';
+import { sendMessage } from "./sendMessage.ts";
 
 export const sendChainResponse = async (
   socket: StandardWebSocketClient,
@@ -11,5 +12,5 @@ export const sendChainResponse = async (
     chainLength,
     lastBlockHash,
   };
-  await socket.send(JSON.stringify(message));
+  await sendMessage(socket, message);
 };

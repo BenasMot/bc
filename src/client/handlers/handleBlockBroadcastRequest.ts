@@ -21,10 +21,10 @@ export const handleBlockBroadcastRequest = async (
   } = message.block;
 
   const blockBaseWithNonce = {
-    previousBlockHash,
     data,
-    publicKey,
+    previousBlockHash,
     chainNumber,
+    publicKey,
     nonce,
   };
   const blockWithoutSignature = { ...blockBaseWithNonce, hash, timestamp };
@@ -40,6 +40,13 @@ export const handleBlockBroadcastRequest = async (
 
   const verified = isChainNumberCorrect && isHashCorrect && isPreviousHashCorrect &&
     isSignatureValid;
+
+  console.log('@@@', verified, {
+    isChainNumberCorrect,
+    isHashCorrect,
+    isPreviousHashCorrect,
+    isSignatureValid,
+  });
 
   store.saveBlockVerificationStatus(hash, verified);
   sendBlockBroadcastResponse(socket, verified, hash);

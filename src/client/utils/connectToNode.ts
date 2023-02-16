@@ -1,6 +1,7 @@
 import { StandardWebSocketClient } from 'https://deno.land/x/websocket@v0.1.4/mod.ts';
 import { store } from '../../store/store.ts';
-import { Message } from '../message.ts';
+import { handleConnection } from '../handlers/handleConnection.ts';
+import { sendHandshake } from '../senders/sendHandshake.ts';
 import { nodeToAddress } from './nodeToAddress.ts';
 
 export const connectToNode = (address: string) => {
@@ -11,33 +12,33 @@ export const connectToNode = (address: string) => {
   const socket = new StandardWebSocketClient(address);
 
   socket.on('open', () => {
-    const message: Message = {
-      type: 'HANDSHAKE',
-      nodes: store.getNodes().map(nodeToAddress),
-    };
-    socket.send(JSON.stringify(message));
+    sendHandshake(socket);
     store.addNode({ address, socket });
   });
+
+  socket.on('message', () => handleConnection(socket));
 
   socket.on('close', () => {
     store.removeNode(address);
   });
+
+  socket.on('error', (err: unknown) => console.error(err));
 };
 
 const isConnectable = (address: string) => {
   const connectedNodeAddresses = store.getNodes().map(nodeToAddress);
-  const notConnected = connectedNodeAddresses.includes(address);
+  const isConnected = connectedNodeAddresses.includes(address);
   const notSelf = address !== store.getIdentity().address;
   const underNodeLimit = store.getNodes().length < store.getMaxPeers();
 
   reportConnectionError({
-    isConnected: !notConnected,
+    isConnected,
     isSelf: !notSelf,
     maxPeers: !underNodeLimit,
     address,
   });
 
-  return notConnected && notSelf && underNodeLimit;
+  return !isConnected && notSelf && underNodeLimit;
 };
 
 const reportConnectionError = (

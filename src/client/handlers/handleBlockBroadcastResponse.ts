@@ -5,6 +5,10 @@ import { shareBlock } from '../utils/shareBlock.ts';
 import { updateChain } from '../utils/updateChain.ts';
 
 export const handleBlockBroadcastResponse = async (message: BlockBroadcastResponseMessage) => {
+  console.log(
+    '### Handling block response',
+    message.checkedBlockHash === store.getPendingBlock()?.hash,
+  );
   const { checkedBlockHash, verified } = message;
   assertIsPendingBlock(checkedBlockHash);
 
@@ -13,6 +17,7 @@ export const handleBlockBroadcastResponse = async (message: BlockBroadcastRespon
   const verifiedCount = responses.filter(Boolean).length;
   const peerCount = store.getNodes().length;
 
+  console.log('###', verifiedCount, peerCount);
   if (verifiedCount >= peerCount / 2) {
     const block = store.getPendingBlock()!;
     await shareBlock(block);

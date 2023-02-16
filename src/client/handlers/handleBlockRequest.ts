@@ -8,7 +8,9 @@ export const handleBlockRequest = async (
   socket: StandardWebSocketClient,
 ) => {
   const { blockNumber } = message;
-  const block = await db.getBlockFromChain(blockNumber);
+  const block = db.getBlockFromChain(blockNumber);
 
-  sendBlockResponse(socket, block);
+  if (block) {
+    await sendBlockResponse(socket, block);
+  }
 };
