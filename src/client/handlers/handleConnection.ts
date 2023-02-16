@@ -15,7 +15,7 @@ export const handleConnection = (socket: StandardWebSocketClient) => {
     const message: Message = typeof messageObj === 'string'
       ? JSON.parse(messageObj)
       : messageObj.data;
-    logMessage(message, 'RECEIVED');
+    logMessage(message, 'RECEIVED', socket.webSocket?.url);
 
     switch (message.type) {
       case 'HANDSHAKE': {
@@ -69,5 +69,13 @@ export const handleConnection = (socket: StandardWebSocketClient) => {
       default:
         break;
     }
+  });
+
+  socket.on('error', () => {
+    console.log('@@@ handleConnection error in socket', socket.webSocket?.url);
+  });
+
+  socket.on('close', () => {
+    console.log('@@@ handleConnection closed socket', socket.webSocket?.url);
   });
 };

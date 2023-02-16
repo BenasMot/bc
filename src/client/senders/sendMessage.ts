@@ -3,6 +3,6 @@ import { logMessage } from '../../utils/log/logMessage.ts';
 import { Message } from '../message.ts';
 
 export const sendMessage = async (socket: StandardWebSocketClient, message: Message) => {
-  logMessage(message, 'SENDING');
+  logMessage(message, 'SENDING', socket.webSocket?.url);
   await socket.send(JSON.stringify(message));
 };
