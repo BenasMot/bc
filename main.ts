@@ -10,9 +10,12 @@ if (!env.PRIVATE_KEY || !env.PUBLIC_KEY) {
   throw Error('No keys provided');
 }
 
+const ip = Deno.args[0] || env.IP_ADDRESS || 'localhost';
+const port = Number(Deno.args[1]) || Number(env.PORT) || 3000;
+
 store.setIdentity({
-  port: Number(env.PORT) || 3000,
-  address: env.ADDRESS || 'ws://localhost:3000',
+  port,
+  address: `ws://${ip}:${port}`,
   name: env.NAME || 'Lab Equipment 1',
 });
 
