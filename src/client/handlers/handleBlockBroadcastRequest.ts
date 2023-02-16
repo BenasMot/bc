@@ -49,5 +49,5 @@ export const handleBlockBroadcastRequest = async (
   });
 
   store.saveBlockVerificationStatus(hash, verified);
-  sendBlockBroadcastResponse(socket, verified, hash);
+  await sendBlockBroadcastResponse(socket, verified, hash);
 };
