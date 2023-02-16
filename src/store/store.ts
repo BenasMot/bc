@@ -24,8 +24,12 @@ export interface Node {
 export interface ChainLengthResponse {
   chainLength: number;
   lastBlockHash: string;
-  socket: StandardWebSocketClient;
 }
+
+type ChainLengthResponses = {
+  response: ChainLengthResponse;
+  socket: StandardWebSocketClient;
+}[];
 
 interface Store {
   keys: CryptoKeyPair | undefined;
@@ -34,7 +38,7 @@ interface Store {
   options: Options;
   nodes: Node[];
   chain: BlockchainInfo;
-  chainLengthResponses: ChainLengthResponse[];
+  chainLengthResponses: ChainLengthResponses;
   blockRequestMap: Map<number, Block>;
   appLoopId: number;
 }
@@ -89,7 +93,7 @@ const setters = {
   setPendingBlock: (block: Block) => _store.chain.pendingBlock = block,
   setVerificationResponses: (responsesMap: BlockchainInfo['verificationResponses']) =>
     _store.chain.verificationResponses = responsesMap,
-  setChainLengthResponses: (responses: ChainLengthResponse[]) =>
+  setChainLengthResponses: (responses: ChainLengthResponses) =>
     _store.chainLengthResponses = responses,
   setBlockRequestMap: (map: Map<number, Block>) => _store.blockRequestMap = map,
   setAppLoopId: (id: number) => _store.appLoopId = id,

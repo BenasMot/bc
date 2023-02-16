@@ -1,3 +1,4 @@
+import { StandardWebSocketClient } from 'https://deno.land/x/websocket@v0.1.4/mod.ts';
 import { Block } from '../database/types/Block.ts';
 import { BlockchainInfo } from '../database/types/BlockchainInfo.ts';
 import { ChainLengthResponse, Node, store } from './store.ts';
@@ -82,9 +83,9 @@ const addBlockToChain = (block: Block) => {
   store.setBlockchain(newChainInfo);
 };
 
-const addChainLengthResponse = (response: ChainLengthResponse) => {
+const addChainLengthResponse = (response: ChainLengthResponse, socket: StandardWebSocketClient) => {
   const currentResponses = store.getChainLengthResponses();
-  const newResponses = [...currentResponses, response];
+  const newResponses = [...currentResponses, { response, socket }];
 
   store.setChainLengthResponses(newResponses);
 };
