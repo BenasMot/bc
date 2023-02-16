@@ -11,6 +11,13 @@ export const initDatabase = () => {
   const filepath = env.ENVIRONMENT === 'TEST' ? TEST_DB : PRODUCTION_DB;
   db = new DB(filepath);
 
+  if (env.ENVIRONMENT === 'DEV') {
+    db.execute(`
+    DROP TABLE ${TABLES.BLOCKCHAIN};
+    DROP TABLE ${TABLES.MEASUREMENTS};
+    `);
+  }
+
   db.execute(`
     CREATE TABLE IF NOT EXISTS ${TABLES.BLOCKCHAIN} (
       ${BLOCK_FIELDS.chainNumber} INTEGER PRIMARY KEY UNIQUE,
