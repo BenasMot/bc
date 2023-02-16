@@ -1,5 +1,5 @@
 import { db } from '../../database/actions.ts';
-import { ChainLengthResponse, store } from '../../store/store.ts';
+import { ChainLengthResponses, store } from '../../store/store.ts';
 import { range } from '../../utils/other/range.ts';
 import { sleep } from '../../utils/other/sleep.ts';
 import { sendChainRequest } from '../senders/sendChainRequest.ts';
@@ -10,12 +10,12 @@ export const updateChain = async () => {
   const peerChainLengths = await gatherChainLengths();
   const dominantResponse = getDominantResponse(peerChainLengths);
 
-  const foundLongerChain = dominantResponse && savedChainLength < dominantResponse.chainLength;
+  const foundLongerChain = dominantResponse && savedChainLength < dominantResponse.response.chainLength;
 
   if (foundLongerChain) {
     const socket = dominantResponse.socket;
     await Promise.all(
-      range(savedChainLength + 1, dominantResponse.chainLength)
+      range(savedChainLength + 1, dominantResponse.response.chainLength)
         .map((blockNumber) => requestBlock(socket, blockNumber)),
     ).catch(() => {
       throw new Error('Failed requesting block');
@@ -39,14 +39,16 @@ const gatherChainLengths = async () => {
   return responses;
 };
 
-const getDominantResponse = (responses: ChainLengthResponse[]): ChainLengthResponse | undefined => {
+const getDominantResponse = (
+  responses: ChainLengthResponses,
+): ChainLengthResponses[number] | undefined => {
   if (!responses || responses.length < 1) {
     console.error('No chain length responses received');
     return;
   }
 
   const map = new Map<string, number>();
-  responses.forEach((response) => {
+  responses.forEach(({ response }) => {
     const key = `${response.lastBlockHash}_${response.chainLength}`;
     const identicalResponseCount = map.get(key);
 
@@ -67,7 +69,7 @@ const getDominantResponse = (responses: ChainLengthResponse[]): ChainLengthRespo
   const lastBlockHash = mostFrequentResponseKey.split('_')[0];
   const chainLength = Number(mostFrequentResponseKey.split('_')[1]);
 
-  return responses.find((resp) =>
+  return responses.find(({ response: resp }) =>
     resp.chainLength === chainLength && resp.lastBlockHash === lastBlockHash
   )!;
 };

@@ -26,7 +26,7 @@ export interface ChainLengthResponse {
   lastBlockHash: string;
 }
 
-type ChainLengthResponses = {
+export type ChainLengthResponses = {
   response: ChainLengthResponse;
   socket: StandardWebSocketClient;
 }[];
