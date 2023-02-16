@@ -11,7 +11,7 @@ import { updateChain } from './utils/updateChain.ts';
 export const startClient = async (peers: string[]) => {
   const server = new WebSocketServer(store.getPort());
   console.log('# Listening on port ', store.getPort());
-  server.on('connection', handleConnection);
+  server.addListener('connection', handleConnection);
 
   peers.forEach(connectToNode);
 

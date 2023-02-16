@@ -11,18 +11,18 @@ export const connectToNode = (address: string) => {
 
   const socket = new StandardWebSocketClient(address);
 
-  socket.on('open', () => {
+  socket.addListener('open', () => {
     sendHandshake(socket);
     store.addNode({ address, socket });
   });
 
-  socket.on('message', () => handleConnection(socket));
+  socket.addListener('message', () => handleConnection(socket));
 
-  socket.on('close', () => {
+  socket.addListener('close', () => {
     store.removeNode(address);
   });
 
-  socket.on('error', (err: unknown) => console.error(err));
+  socket.addListener('error', (err: unknown) => console.error(err));
 };
 
 const isConnectable = (address: string) => {

@@ -11,7 +11,7 @@ import { handleBlockResponse } from './handleBlockResponse.ts';
 import { logMessage } from '../../utils/log/logMessage.ts';
 
 export const handleConnection = (socket: StandardWebSocketClient) => {
-  socket.on('message', (messageObj: string | MessageEvent<Message>) => {
+  socket.addListener('message', (messageObj: string | MessageEvent<Message>) => {
     const message: Message = typeof messageObj === 'string'
       ? JSON.parse(messageObj)
       : messageObj.data;
@@ -71,11 +71,11 @@ export const handleConnection = (socket: StandardWebSocketClient) => {
     }
   });
 
-  socket.on('error', () => {
+  socket.addListener('error', () => {
     console.log('@@@ handleConnection error in socket', socket.webSocket?.url);
   });
 
-  socket.on('close', () => {
+  socket.addListener('close', () => {
     console.log('@@@ handleConnection closed socket', socket.webSocket?.url);
   });
 };
