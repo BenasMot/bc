@@ -11,10 +11,8 @@ import { handleBlockResponse } from './handleBlockResponse.ts';
 import { logMessage } from '../../utils/log/logMessage.ts';
 
 export const handleConnection = (socket: StandardWebSocketClient) => {
-  socket.addListener('message', (messageObj: string | MessageEvent<Message>) => {
-    const message: Message = typeof messageObj === 'string'
-      ? JSON.parse(messageObj)
-      : messageObj.data;
+  socket.addListener('message', (messageObj: string | MessageEvent<string>) => {
+    const message = parseMessage(messageObj);
     logMessage(message, 'RECEIVED', socket.webSocket?.url);
 
     switch (message.type) {
@@ -78,4 +76,8 @@ export const handleConnection = (socket: StandardWebSocketClient) => {
   socket.addListener('close', () => {
     console.log('@@@ handleConnection closed socket', socket.webSocket?.url);
   });
+};
+
+const parseMessage = (messageObj: string | MessageEvent<string>): Message => {
+  return typeof messageObj === 'string' ? JSON.parse(messageObj) : JSON.parse(messageObj.data);
 };
