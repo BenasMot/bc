@@ -1,3 +1,6 @@
 .env
 db.sqlite
 test_db.sqlite
+
+bundle/
+.vscode/
